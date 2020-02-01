@@ -71,13 +71,20 @@ void *func(void *arg) //Addition
 
 int main(void)
 {
+	struct timespec time_1, time_2;
 	int i, j, k;
+	double ex_time = 0.0;
 	
 	pthread_t thread;
 	thread_info_t info;
 
-	create(); // Populates the matrices A and B 
+	// Populates the matrices A and B 
+	create(); 
 
+	// Get START time
+	clock_gettime(CLOCK_REALTIME, &time_1);
+	
+	// CALCULATION OF MATRIX MULTIPLICATION
 	for (i = 0; i < 4; i++) {
 		for (j = 0; j < 4; j++) {
 			for (k = 0; k < 2; k++) {
@@ -94,7 +101,12 @@ int main(void)
 		}	
 	}
 
-   //pthread_join(thread, NULL);
+	// Get END time
+	clock_gettime(CLOCK_REALTIME, &time_2);
+
+	// COMPUTE CALCULATION TIME
+	ex_time = (time_2.tv_nsec - time_1.tv_nsec)/1e09;
+	printf("The calculation was performed in %lf [sec]\n\n", ex_time);
 
    outprint();	
 
