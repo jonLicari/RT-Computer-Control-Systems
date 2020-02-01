@@ -4,14 +4,14 @@
 #include <pthread.h>
 
 struct thread_info {
-   int x, y, one, two; // Aval, Bval, index i, index j
+   int x, y, one, two; // Aval, Bval, index i, j
 };
 
 typedef struct thread_info thread_info_t;
 
 
 int a[4][2], b[2][4];
-int c[4][4] = {0};
+volatile int c[4][4] = {0};
 
 void create() {
 	int i, j;
@@ -25,6 +25,8 @@ void create() {
 		printf("\n");		
 	}
 
+	printf("\n\n");
+
 	/* POPULATE MATRIX B */
 	for (i = 0; i < 2; i++) {
 		for (j = 0; j < 4; j++) {
@@ -34,6 +36,21 @@ void create() {
 		printf("\n");
 	}		
 	printf("\n\n");
+}
+
+void outprint() {
+	int i, j;
+	double sum;
+	for (i = 0; i < 4; i++) {
+		for (j = 0; j < 4; j++) {
+			printf("%4d   ", c[i][j]);
+			sum += c[i][j];
+		}
+
+		printf("\n");
+	}
+
+	printf("\n\nSum is = %f", sum);
 }
 
 void *func(void *arg) //Addition
@@ -52,21 +69,6 @@ void *func(void *arg) //Addition
    pthread_exit(NULL);   
 }
 
-void outprint() {
-	int i, j;
-	double sum;
-	for (i = 0; i < 4; i++) {
-		for (j = 0; j < 4; j++) {
-			printf("%4d   ", c[i][j]);
-			sum += c[i][j];
-		}
-
-		printf("\n");
-	}
-
-	printf("\n\nSum is = %f", sum);
-}
-
 int main(void)
 {
 	int i, j, k;
@@ -80,13 +82,14 @@ int main(void)
 		for (j = 0; j < 4; j++) {
 			for (k = 0; k < 2; k++) {
 
-				c[i][j] += a[i][k]*b[k][j];
-				/*info.x = (int)a[i][j];
-				info.y = b[j][i];
+				//c[i][j] += a[i][k]*b[k][j];
+				info.x = a[i][k];
+				info.y = b[k][j];
 				info.one = i;
 				info.two = j;
 
-				pthread_create(&thread, NULL, &func, &info);*/
+				pthread_create(&thread, NULL, &func, &info);
+				pthread_join(thread, NULL);
 			}
 		}	
 	}
