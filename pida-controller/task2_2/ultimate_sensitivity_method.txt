@@ -1,0 +1,9 @@
+Task 2.2:
+- Folder Task 2.1 contains: 
+	- pcntrl.c
+	- Waveform 22a.jpg shows the waveform for Kp = 100.4 (Stable)
+	- Waveform 22b.jpg shows the waveform for Kp = 100.5 (Marginal Stability)
+	- To run (finds critical gain)
+		>> simcc pcntrl.c
+		>> pcntrl
+		>> p >> 100.5 >> u >> s >> 50 >> r >> g
